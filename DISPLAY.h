@@ -1,3 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <conio.h>
+#include <stdbool.h>
+#define Nil NULL
+#define Info(P) (P)->info
+#define Next(P) (P)->next
+#define First(L) (L).First
+#define first(head) head->first
+#define last(tail) tail->last
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
@@ -21,6 +32,10 @@ typedef struct playlist {
 
 // belum tau untuk apa(kemungkinan ga ke pake)
 typedef struct Node *address;
+
+typedef struct {
+	address First;
+} Last;
 
 // fungsi yang ada
 void createList();

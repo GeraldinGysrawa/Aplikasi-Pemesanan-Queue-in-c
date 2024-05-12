@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
 CompilerSettings=0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
-UnitCount=5
+UnitCount=6
 
 [VersionInfo]
 Major=1
@@ -91,7 +91,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit6]
-FileName=tambahbarang.h
+FileName=C:\KULIAH\boolean.h
 CompileCpp=0
 Folder=
 Compile=1
