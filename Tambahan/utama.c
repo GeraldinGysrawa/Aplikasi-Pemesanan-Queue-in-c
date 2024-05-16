@@ -8,9 +8,8 @@ int main() {
 
     int choice;
     do {
-    // Clear the console screen (Windows)
         choice = menu();
-//        system("cls");
+        system("cls");
         switch(choice) {
             case 1:
                 insert(&list);
@@ -22,6 +21,7 @@ int main() {
                 disList(&list);
                 break;
             case 4:
+            	disList(&list);
                 deleteItem(&list);
                 break;
             case 0:
