@@ -8,7 +8,9 @@ int main() {
 
     int choice;
     do {
+    // Clear the console screen (Windows)
         choice = menu();
+//        system("cls");
         switch(choice) {
             case 1:
                 insert(&list);
@@ -20,7 +22,7 @@ int main() {
                 disList(&list);
                 break;
             case 4:
-                // Hapus barang
+                deleteItem(&list);
                 break;
             case 0:
                 printf("Exiting...\n");
@@ -28,6 +30,7 @@ int main() {
             default:
                 printf("Pilihan tidak valid.\n");
         }
+//    system("cls");
     } while (choice != 0);
 
     return 0;

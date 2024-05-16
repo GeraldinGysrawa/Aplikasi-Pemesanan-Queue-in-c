@@ -16,6 +16,9 @@ typedef struct List {
 
 int menu();
 void insert(List *list);
+void addStock(List *list);
 void disList(List *list);
+void clearList(List *list);
+void deleteItem(List *list);
 
 #endif // BODY_H_INCLUDED
