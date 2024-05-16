@@ -1,0 +1,2 @@
+Laptop Asus|Intel Core 5|3220000.00|2
+HP Xiaomi|RAM 8 GB|1200000.00|2
