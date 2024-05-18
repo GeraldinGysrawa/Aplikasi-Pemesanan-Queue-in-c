@@ -1,26 +1,20 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
 //#include "annisa.h"
-#include "dhea.h"
+#include "login.h"
 //#include "geraldin.h"
 //#include "ikhsan.h"
 #include "Register.h"
-	/.w3
+
 int main() {
     int num;
     int in = 0;
     bool loggedIn = false;
-
+	
     do {
-        CONSOLE_SCREEN_BUFFER_INFO csbi;
-        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-        COORD cursorPosition;
-        cursorPosition.X = (csbi.dwSize.X - 45) / 2;
-        cursorPosition.Y = csbi.dwSize.Y / 2;
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
-
         system("cls");
         system("color 3F");
         printf("\t\t\t\t===================================\n");

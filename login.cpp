@@ -4,19 +4,21 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <conio.h>
-#include "dhea.h"
+#include "login.h"
 #define MAX 100
 
 // Prototype
 int checkCredentials(char *username, char *password, char *file_name);
 
 // matrik invers
-int inverse_key[2][2] = {{6, 5}, {15, 16}};
-
-// deklarasi prototype fungsi
-void multiplyMatrix(int key[2][2], int message[2][1], int res[2][1]);
+//int inverse_key[2][2] = {{6, 5}, {15, 16}};
 void decryptPassword(char *encrypted_password, char *decrypted_password);
 void Login();
+// deklarasi prototype fungsi
+//void multiplyMatrix(int key[2][2], int message[2][1], int res[2][1]);
+//void decryptPassword(char *encrypted_password, char *decrypted_password);
+void Login();
+
 
 // untuk login
 void Login(){
@@ -36,15 +38,40 @@ void Login(){
     
     // Memeriksa kecocokan username dan password
     if (checkCredentials(username, password, "file_user1.3.txt")) {
+        printf("\t\t\t\tLogin berhasil!\n");
+        //MenuUtama();
+    } else {
+        printf("Login gagal. Username atau password salah.\n");
+    }
+    getch();
+    /*
+    // Memeriksa kecocokan username dan password
+    if (checkCredentials(username, password, 	"file_user1.3.txt")) {
     	printf("\t\t\t\tLogin berhasil!\n");
     	//MenuUtama();
     } else {
         printf("Login gagal. Username atau password salah.\n");
     }
-    getch();
+    getch();*/
 }
 
-
+// Fungsi decryptPassword baru untuk Caesar Cipher
+void decryptPassword(char *encrypted_password, char *decrypted_password) {
+    int shift = 3; // Shift untuk Caesar Cipher
+    int i;
+    for (i = 0; encrypted_password[i] != '\0'; ++i) {
+        char ch = encrypted_password[i];
+        if (ch >= 'a' && ch <= 'z') {
+            decrypted_password[i] = ((ch - 'a' - shift + 26) % 26) + 'a';
+        } else if (ch >= 'A' && ch <= 'Z') {
+            decrypted_password[i] = ((ch - 'A' - shift + 26) % 26) + 'A';
+        } else {
+            decrypted_password[i] = ch;
+        }
+    }
+    decrypted_password[i] = '\0'; // Menambahkan null terminator
+}
+/*
 void decryptPassword(char *encrypted_password, char *decrypted_password) {
     int len = strlen(encrypted_password);
     int total_rows = (len % 2 != 0) ? (len / 2 + 1) : (len / 2);
@@ -84,9 +111,9 @@ void decryptPassword(char *encrypted_password, char *decrypted_password) {
     }
     decrypted_password[k] = '\0'; // Menambahkan null terminator
 }
+*/
 
-
-// untuk check username dan password
+// Fungsi untuk memeriksa kredensial
 int checkCredentials(char *username, char *password, char *file_name) {
     FILE *file = fopen(file_name, "r"); // Buka file
 
@@ -119,3 +146,39 @@ int checkCredentials(char *username, char *password, char *file_name) {
     printf("Login gagal. Username atau password salah.\n");
     return false; // Username dan password tidak cocok
 }
+
+
+/*
+// untuk check username dan password
+int checkCredentials(char *username, char *password, char *file_name) {
+    FILE *file = fopen(file_name, "r"); // Buka file
+
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+        return false;
+    }
+
+    char line[MAX];
+    while (fgets(line, sizeof(line), file) != NULL) {
+        char saved_username[MAX];
+        char saved_encrypted_password[MAX];
+
+        // Memindai username dan password terenkripsi dari setiap baris dalam file
+        sscanf(line, "%*s %*s %s %s", saved_username, saved_encrypted_password);
+
+        // Dekripsi password yang tersimpan dalam file
+        char decrypted_password[MAX];
+        //decryptPassword(saved_encrypted_password, decrypted_password);
+
+        // Bandingkan username dan password yang telah terdekripsi dengan input pengguna
+        if (strcmp(saved_username, username) == 0 && strcmp(decrypted_password, password) == 0) {
+            fclose(file);
+            printf("Login berhasil!\n");
+            return true; // username dan password cocok
+        }
+    }
+
+    fclose(file);
+    printf("Login gagal. Username atau password salah.\n");
+    return false; // Username dan password tidak cocok
+}*/
