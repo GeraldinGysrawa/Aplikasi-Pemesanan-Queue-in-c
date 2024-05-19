@@ -1,16 +1,6 @@
-#include <stdio.h>
-#include <conio.h>
-#include <string.h>
-#include <string.h>
+#include "annisa.h"
 #include "rizky.h"
 
-void createList(List *list) 
-{
-    list->head = NULL;
-    list->tail = NULL;
-}  
-
-// Untuk menampilkan list barang yang ada
 void disList(List *list) 
 {
     FILE *file = fopen("jualan.txt", "r");
