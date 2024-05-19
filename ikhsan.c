@@ -108,6 +108,7 @@ void displayPembeli(Queue *q) {
     }
 }
 
+// Fungsi untuk menghapus elemen dari antrian
 void dequeue(Queue *q) {
     if (q->front == NULL) {
         printf("Antrian pembeli kosong.\n");
@@ -129,6 +130,7 @@ void dequeue(Queue *q) {
     free(temp);
 }
 
+// Fungsi untuk memperbarui file setelah perubahan pada antrian
 void updateFile(Queue *q) {
     // Buka file untuk menulis data yang telah diperbarui
     FILE *file = fopen("pembeli.txt", "w");
@@ -153,6 +155,7 @@ void updateFile(Queue *q) {
     fclose(file);
 }
 
+// Fungsi untuk menyalin isi file dari satu file ke file lain
 void copyFileContents(const char *sourceFile, const char *destinationFile) {
     FILE *source = fopen(sourceFile, "r");
     FILE *destination = fopen(destinationFile, "w");
@@ -163,6 +166,7 @@ void copyFileContents(const char *sourceFile, const char *destinationFile) {
         return;
     }
 
+    // Salin isi file baris demi baris
     char line[100];
     while (fgets(line, sizeof(line), source) != NULL) {
         fputs(line, destination);
@@ -172,20 +176,23 @@ void copyFileContents(const char *sourceFile, const char *destinationFile) {
     fclose(destination);
 }
 
+// Fungsi untuk menghapus file sementara
 void deleteTempFile(const char *filename) {
-    if (remove(filename) != 0) {
-        printf("Gagal menghapus file sementara.\n");
+    if (remove(filename) != 0) { // Periksa apakah file berhasil dihapus
+        printf("Gagal menghapus file sementara.\n"); // Cetak pesan kesalahan jika file tidak bisa dihapus
     }
 }
 
 
 
+// Fungsi untuk menghapus elemen dari antrian dan memperbarui file
 void removeFromQueue(Queue *q) {
-    dequeue(q);
-    updateFile(q);
-    copyFileContents("pembeli.txt", "pembeli_temp.txt");
-    deleteTempFile("pembeli_temp.txt");
+    dequeue(q); // Hapus elemen dari antrian
+    updateFile(q); // Perbarui file dengan antrian yang telah diubah
+    copyFileContents("pembeli.txt", "pembeli_temp.txt"); // Salin isi file ke file sementara
+    deleteTempFile("pembeli_temp.txt"); // Hapus file sementara
 
+    // Cetak pesan bahwa pembeli telah dikeluarkan dan file diperbarui
     printf("Pembeli telah dikeluarkan dari antrian dan file telah diperbarui.\n");
 }
 
