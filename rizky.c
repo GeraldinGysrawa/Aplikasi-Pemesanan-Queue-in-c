@@ -69,3 +69,66 @@ void disList(List *list)
 
     printf("===========================================================================\n");
 }
+
+void history(Queue *q) 
+{
+	char opsi;
+    FILE *file;
+    char buffer[256];
+    
+    // Membuka file dalam mode read
+    file = fopen("history.txt", "r");
+    if (file == NULL) 
+	{
+        perror("Error opening file");
+        return;
+    }
+	
+	printf("Histori Pembelian Barang\n");
+	printf("========================================\n");
+    // Membaca setiap baris dalam file dan menampilkannya
+    while (fgets(buffer, sizeof(buffer), file) != NULL) 
+    {
+	if (buffer[0] == '\n' || buffer[0] == '\r' || buffer[0] == '\0') {
+            printf("========================================\n");
+        } else {
+            printf("%s", buffer);
+        }
+	}
+    // Menutup file
+    fclose(file);
+    
+    do
+    {
+	    printf("\nHapus seluruh history pemesanan?\n");
+	    printf("1. Hapus\n");
+	    printf("2. Kembali\n");
+	    printf("Pilihan anda: ");
+	    scanf("%d", &opsi);
+	    
+	    switch(opsi) {
+	    	case 1:
+	    		clearHistory();
+	    		break;
+	    	case 2:
+	    		break;
+	    	default:
+	    		printf("Pilihan tidak valid\n");
+		}
+	} while (opsi != 2);
+}
+
+void clearHistory() {
+    FILE *file;
+
+    // Membuka file dalam mode write untuk menghapus semua isinya
+    file = fopen("history.txt", "w");
+    if (file == NULL) {
+        perror("Error opening file");
+        return;
+    }
+
+    // Menutup file setelah dibuka dalam mode write, yang akan menghapus semua isinya
+    fclose(file);
+    printf("History telah dihapus.\n");
+}
