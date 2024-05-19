@@ -5,21 +5,23 @@
 
 
 
+// Fungsi untuk membaca file dan mengisi antrian
 void readFileToQueue(Queue *q) {
-    FILE *file = fopen("pembeli.txt", "r");
-    if (file == NULL) {
-        printf("Gagal membuka file.\n");
+    FILE *file = fopen("pembeli.txt", "r"); // Buka file untuk dibaca
+    if (file == NULL) { // Periksa apakah file berhasil dibuka
+        printf("Gagal membuka file.\n"); // Cetak pesan kesalahan jika file tidak bisa dibuka
         return;
     }
 
-    while (!feof(file)) {
-        listBarang *newNode = (listBarang*)malloc(sizeof(listBarang));
-        if (newNode == NULL) {
-            printf("Memory allocation failed.\n");
-            fclose(file);
+    while (!feof(file)) { // Lanjutkan sampai akhir file
+        listBarang *newNode = (listBarang*)malloc(sizeof(listBarang)); // Alokasikan memori untuk node baru
+        if (newNode == NULL) { // Periksa apakah alokasi memori berhasil
+            printf("Gagal mengalokasikan memori.\n"); // Cetak pesan kesalahan jika alokasi gagal
+            fclose(file); // Tutup file
             return;
         }
 
+        // Baca data dari file dan simpan di node baru
         fscanf(file, "Nama Pembeli: %[^\n]\n", newNode->namapembeli);
         fscanf(file, "Nama Barang: %[^\n]\n", newNode->namabarang);
         fscanf(file, "Jumlah: %d\n", &newNode->qty);
@@ -27,18 +29,18 @@ void readFileToQueue(Queue *q) {
         fscanf(file, "Alamat Email: %[^\n]\n", newNode->identitas.alamatemail);
         fscanf(file, "No. Telepon: %d\n\n", &newNode->identitas.notelp);
 
-        newNode->next = NULL;
+        newNode->next = NULL; // Setel pointer next dari node baru ke NULL
 
-        if (q->rear == NULL) {
-            q->front = newNode;
+        if (q->rear == NULL) { // Periksa apakah antrian kosong
+            q->front = newNode; // Jika ya, setel front dan rear ke node baru
             q->rear = newNode;
         } else {
-            q->rear->next = newNode;
+            q->rear->next = newNode; // Jika tidak, tambahkan node baru ke akhir antrian
             q->rear = newNode;
         }
     }
 
-    fclose(file);
+    fclose(file); // Tutup file setelah selesai
 }
 
 
