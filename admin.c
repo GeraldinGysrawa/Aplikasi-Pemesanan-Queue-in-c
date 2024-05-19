@@ -3,50 +3,47 @@
 #include "annisa.h"
 #include "rizky.h"
 #include "ikhsan.h"
+#include "dhea.h"
 #include <stdbool.h>
 
-int loginadmin() {
-    int num;
-    int in = 0;
-    bool loggedIn = true;
-	
-    do {
-        system("cls");
-        system("color 4F");
-        printf("\t\t\t\t===================================\n");
-        printf("\t\t\t\t     SELAMAT DATANG DI APLIKASI\n");
-        printf("\t\t\t\t===================================\n");
-        printf("\t\t\t\t1. Register\n");
-        printf("\t\t\t\t2. Login\n");
-        printf("\t\t\t\t3. Exit\n");
-        printf("\t\t\t\t===================================\n");
-        printf("\t\t\t\tPilihan Anda: ");
-        scanf("%d", &num);
+void adminMenu() {
+    int choice;
+    bool isAdmin = true;
+    int index = 0;
 
-        switch(num) {
+    while (1) {
+        system("cls");
+        printf("Admin Menu:\n");
+        printf("1. Register\n");
+        printf("2. Login\n");
+        printf("3. Back to Main Menu\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
             case 1:
-                Register(in);
+                Register(index, isAdmin);
                 break;
             case 2:
-                Login(); // Mengirimkan alamat variabel loggedIn agar dapat diubah di dalam fungsi
+                if (Login(isAdmin)) {
+                    printf("Admin Login Successful\n");
+                    system("cls");
+                    admin();
+                } else {
+                    printf("Admin Login Failed\n");
+                }
+                getchar(); // To pause the screen
+                getchar(); // To pause the screen
                 break;
             case 3:
-                return 0;
+                return;
             default:
-                printf("Pilihan tidak valid.\n");
-                break;
+                printf("Invalid choice\n");
+                getchar(); // To pause the screen
+                getchar(); // To pause the screen
         }
-
-        // Jika sudah login, panggil MenuUtama dan reset loggedIn
-        if (loggedIn) {
-            admin();
-            loggedIn = false;
-        }
-    } while (num != 3);
-
-    return 0;
+    }
 }
-
 int admin() {
     List barangList;
     barangList.head = NULL;

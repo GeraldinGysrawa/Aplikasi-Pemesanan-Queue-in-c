@@ -5,45 +5,45 @@
 #include "dhea.h"
 #include <stdbool.h>
 
-int loginuser() {
-    int num;
-    int in = 0;
-    bool loggedIn = true;
-	
-    do {
-        system("cls");
-        system("color 3F");
-        printf("\t\t\t\t===================================\n");
-        printf("\t\t\t\t     SELAMAT DATANG DI APLIKASI\n");
-        printf("\t\t\t\t===================================\n");
-        printf("\t\t\t\t1. Register\n");
-        printf("\t\t\t\t2. Login\n");
-        printf("\t\t\t\t3. Exit\n");
-        printf("\t\t\t\t===================================\n");
-        printf("\t\t\t\tPilihan Anda: ");
-        scanf("%d", &num);
 
-        switch(num) {
+void userMenu() {
+    int choice;
+    bool isAdmin = false;
+    int index = 0;
+
+    while (1) {
+        system("cls");
+        printf("User Menu:\n");
+        printf("1. Register\n");
+        printf("2. Login\n");
+        printf("3. Back to Main Menu\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
             case 1:
-                Register(in);
+                Register(index, isAdmin);
                 break;
             case 2:
-                Login(); // Mengirimkan alamat variabel loggedIn agar dapat diubah di dalam fungsi
+                if (Login(isAdmin)) {
+                    printf("User Login Successful\n");
+                    user();
+                } else {
+                    printf("User Login Failed\n");
+                }
+                getchar(); // To pause the screen
+                getchar(); // To pause the screen
                 break;
             case 3:
-				return 0;
+                return;
             default:
-                printf("Pilihan tidak valid.\n");
-                break;
+                printf("Invalid choice\n");
+                getchar(); // To pause the screen
+                getchar(); // To pause the screen
         }
-        if (loggedIn) {
-            user();
-            loggedIn = false;
-        }
-    } while (num != 3);
-
-    return 0;
+    }
 }
+
 
 int user() {
     List barangList;

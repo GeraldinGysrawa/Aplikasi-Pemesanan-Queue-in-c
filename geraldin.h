@@ -16,5 +16,7 @@ int isValidItem(List *list, const char *name);
 //tampilan dan penggabungan
 int user();
 int admin();
+int loginuser();
+int loginadmin();
 
 #endif

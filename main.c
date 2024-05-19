@@ -1,33 +1,37 @@
 #include "annisa.h"
-//main.c
 #include "dhea.h"
 #include "geraldin.h"
 #include "ikhsan.h"
 #include "rizky.h"
 
-
 int main() {
     int choice;
 
-    // Menampilkan menu utama
-    printf("Menu Utama\n");
-    printf("1. Admin\n");
-    printf("2. User\n");
-    printf("Masukkan pilihan Anda: ");
-    scanf("%d", &choice);
+    while (1) {
+        system("cls");
+        printf("1. Admin\n");
+        printf("2. User\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-    // Menggunakan switch case untuk menangani pilihan
-    switch (choice) {
-        case 1:
-            loginadmin();
-            break;
-        case 2:
-            loginuser();
-            break;
-        default:
-            printf("Pilihan tidak valid!\n");
-            break;
+        switch (choice) {
+            case 1:
+                adminMenu();
+                break;
+            case 2:
+                userMenu();
+                break;
+            case 3:
+                exit(0);
+            default:
+                printf("Invalid choice\n");
+                getchar(); // To pause the screen
+                getchar(); // To pause the screen
+        }
     }
-
     return 0;
 }
+
+
+
