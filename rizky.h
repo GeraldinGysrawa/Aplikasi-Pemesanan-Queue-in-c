@@ -5,5 +5,7 @@
 #include <string.h>
 
 void disList(List *list);
+void history(Queue *q);
+void clearHistory();
 
 #endif
