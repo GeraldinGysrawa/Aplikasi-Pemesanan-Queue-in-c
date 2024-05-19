@@ -1,0 +1,42 @@
+Nama Pembeli: hjk
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: ghj
+Alamat Email: ghj
+No. Telepon: 1234
+
+Nama Pembeli: uytf
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: rt
+Alamat Email: rdtfy
+No. Telepon: 123456789
+
+Nama Pembeli: oaubc
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: qswfc
+Alamat Email: qef
+No. Telepon: 134556
+
+Nama Pembeli: cvbn
+Nama Barang: laptop asus 14x
+Jumlah: 5
+Alamat Rumah: qef
+Alamat Email: qef
+No. Telepon: 1345
+
+Nama Pembeli: q3wd
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: wed
+Alamat Email: qesfc
+No. Telepon: 13243
+
+Nama Pembeli: ubn
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: efw
+Alamat Email: wef
+No. Telepon: 124
+

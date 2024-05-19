@@ -1,0 +1,3 @@
+laptop asus 14x|bagus|4000.00|225
+hp|keren|50000.00|65
+ipad vivo|lucu|54000.00|55
