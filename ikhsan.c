@@ -44,16 +44,20 @@ void readFileToQueue(Queue *q) {
 }
 
 
+// Fungsi untuk menampilkan antrian pembeli
 void displayPembeli(Queue *q) {
-    if (q->front == NULL) {
-        printf("Antrian pembeli kosong.\n");
+    system("cls"); // Bersihkan layar
+    if (q->front == NULL) { // Periksa apakah antrian kosong
+        printf("Antrian pembeli kosong.\n"); // Cetak pesan jika antrian kosong
         return;
     }
 
+    // Cetak header tabel
     printf("====================================================================\n");
     printf("| %-20s | %-25s | %-15s |\n", "Nama Pembeli", "Barang yang Dibeli", "Jumlah Barang");
     printf("====================================================================\n");
 
+    // Cetak setiap elemen antrian
     listBarang *current = q->front;
     while (current != NULL) {
         printf("| %-20s | %-25s | %-15d |\n", current->namapembeli, current->namabarang, current->qty);
@@ -62,12 +66,15 @@ void displayPembeli(Queue *q) {
 
     printf("====================================================================\n");
 
+    // Tanya apakah ingin mencetak pesanan dari node pertama
     char option;
     printf("Apakah Anda ingin mencetak pesanan dari node pertama? (y/n): ");
     scanf(" %c", &option);
 
     if (option == 'y' || option == 'Y') {
         listBarang *firstNode = q->front;
+
+        // Cetak struk pengiriman
         printf("\n");
         printf("==============================================================\n");
         printf("|                      STRUK PENGIRIMAN                      |\n");
