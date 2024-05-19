@@ -1,6 +1,6 @@
 [Project]
-FileName=Project2.dev
-Name=Project2
+filename=Project1.dev
+name=Project1
 Type=1
 Ver=2
 ObjFiles=
@@ -28,8 +28,8 @@ Folders=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
-UnitCount=6
+CompilerSettings=0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;4;0;0;0
+UnitCount=3
 
 [VersionInfo]
 Major=1
@@ -51,17 +51,7 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
-FileName=main.c
-CompileCpp=0
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit2]
-FileName=modul_show.c
+FileName=refbody.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -71,7 +61,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit3]
-FileName=DISPLAY.h
+FileName=..\..\..\Proyek2_khususNisa\utama.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -80,28 +70,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit5]
-FileName=tambahbarang.h
-CompileCpp=0
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit6]
-FileName=C:\KULIAH\boolean.h
-CompileCpp=0
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit4]
-FileName=tambahbarang.c
+[Unit2]
+FileName=..\..\..\Proyek2_khususNisa\tubuh.h
 CompileCpp=0
 Folder=
 Compile=1
