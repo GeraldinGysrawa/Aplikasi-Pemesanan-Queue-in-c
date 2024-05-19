@@ -66,13 +66,20 @@ void displayPembeli(Queue *q) {
 
     if (option == 'y' || option == 'Y') {
         listBarang *firstNode = q->front;
-        printf("\nDetail Pesanan:\n");
-        printf("Nama Pembeli: %s\n", firstNode->namapembeli);
-        printf("Nama Barang: %s\n", firstNode->namabarang);
-        printf("Jumlah Barang: %d\n", firstNode->qty);
-        printf("Alamat Rumah: %s\n", firstNode->identitas.alamatrumah);
-        printf("Alamat Email: %s\n", firstNode->identitas.alamatemail);
-        printf("No. Telepon: %d\n", firstNode->identitas.notelp);
+        printf("\n");
+        printf("==============================================================\n");
+        printf("|                      STRUK PENGIRIMAN                      |\n");
+        printf("==============================================================\n");
+        printf("| %-30s: %-30s |\n", "Nama Pembeli", firstNode->namapembeli);
+        printf("| %-30s: %-30s |\n", "Nama Barang", firstNode->namabarang);
+        printf("| %-30s: %-30d |\n", "Jumlah Barang", firstNode->qty);
+        printf("| %-30s: %-30s |\n", "Alamat Rumah", firstNode->identitas.alamatrumah);
+        printf("| %-30s: %-30s |\n", "Alamat Email", firstNode->identitas.alamatemail);
+        printf("| %-30s: %-30d |\n", "No. Telepon", firstNode->identitas.notelp);
+        printf("==============================================================\n");
+        printf("|                   TERIMA KASIH ATAS PESANAN ANDA!                |\n");
+        printf("|                Silakan kunjungi kami lagi!                      |\n");
+        printf("==============================================================\n");
 
         // Menghapus node pertama dari antrian (memperbarui antrian)
         removeFromQueue(q);
