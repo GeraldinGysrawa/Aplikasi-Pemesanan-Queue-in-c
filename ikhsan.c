@@ -74,6 +74,15 @@ void displayPembeli(Queue *q) {
     if (option == 'y' || option == 'Y') {
         listBarang *firstNode = q->front;
 
+        char decryptedAlamat[500];
+        char decryptedEmail[100];
+
+        strcpy(decryptedAlamat, firstNode->identitas.alamatrumah);
+        strcpy(decryptedEmail, firstNode->identitas.alamatemail);
+
+        dekripsiceasar(decryptedAlamat, 7);
+        dekripsiceasar(decryptedEmail, 7);
+
         // Cetak struk pengiriman
         printf("\n");
         printf("==============================================================\n");
@@ -183,18 +192,48 @@ void deleteTempFile(const char *filename) {
     }
 }
 
-
-
-// Fungsi untuk menghapus elemen dari antrian dan memperbarui file
+// Fungsi utama yang menghapus elemen dari antrian dan memperbarui file
 void removeFromQueue(Queue *q) {
-    dequeue(q); // Hapus elemen dari antrian
-    updateFile(q); // Perbarui file dengan antrian yang telah diubah
-    copyFileContents("pembeli.txt", "pembeli_temp.txt"); // Salin isi file ke file sementara
-    deleteTempFile("pembeli_temp.txt"); // Hapus file sementara
+    // Buat salinan sementara terlebih dahulu
+    copyFileContents("pembeli.txt", "pembeli_temp.txt");
 
-    // Cetak pesan bahwa pembeli telah dikeluarkan dan file diperbarui
-    printf("Pembeli telah dikeluarkan dari antrian dan file telah diperbarui.\n");
+    // Hapus elemen pertama dari antrian
+    if (q->front == NULL) {
+        printf("Antrian pembeli kosong, tidak ada yang dihapus.\n");
+        // Hapus file sementara karena tidak ada perubahan yang dilakukan
+        deleteTempFile("pembeli_temp.txt");
+        return;
+    }
+    dequeue(q);
+
+    // Perbarui file pembeli.txt dengan data antrian yang baru
+    if (q->front != NULL) {
+        // Jika ada data yang akan ditulis ke file, maka update file
+        updateFile(q);
+        // Hapus file sementara hanya jika pembaruan file berhasil
+        deleteTempFile("pembeli_temp.txt");
+    } else {
+        // Jika antrian kosong setelah dequeue, maka jadikan file sementara sebagai file utama
+        if (rename("pembeli_temp.txt", "pembeli.txt") != 0) {
+            printf("Gagal mengganti file asli dengan file sementara.\n");
+            // Jika gagal, tetap gunakan file sementara sebagai file utama dan hapus file sementara
+            printf("File sementara akan tetap digunakan sebagai file utama.\n");
+        } else {
+            printf("File sementara telah menjadi file utama.\n");
+        }
+    }
 }
+
+// // Fungsi untuk menghapus elemen dari antrian dan memperbarui file
+// void removeFromQueue(Queue *q) {
+//     dequeue(q); // Hapus elemen dari antrian
+//     updateFile(q); // Perbarui file dengan antrian yang telah diubah
+//     copyFileContents("pembeli.txt", "pembeli_temp.txt"); // Salin isi file ke file sementara
+//     deleteTempFile("pembeli_temp.txt"); // Hapus file sementara
+
+//     // Cetak pesan bahwa pembeli telah dikeluarkan dan file diperbarui
+//     printf("Pembeli telah dikeluarkan dari antrian dan file telah diperbarui.\n");
+// }
 
 
 
