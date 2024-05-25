@@ -1,0 +1,17 @@
+1|Laptop|Performa tinggi|6500000.00|30
+2|Laptop convertible|Layar sentuh|8500000.00|20
+3|Tablet|Layar OLED|11000000.00|15
+4|Smartphone|Kamera canggih|12000000.00|25
+5|Smartwatch|Fitur kesehatan|8000000.00|40
+6|Kamera|Kualitas tinggi|25000000.00|9
+7|Headphone|Noise cancel|4500000.00|50
+8|Televisi|Kualitas HD|18000000.00|12
+9|Konsol game|Performa tinggi|9500000.00|8
+10|Drone|Kamera 4K|14000000.00|10
+11|Proyektor|Resolusi tinggi|6000000.00|25
+12|Soundbar|Suara surround|12000000.00|20
+13|Printer|Tinta refill|2500000.00|25
+14|Router|WiFi 6|2000000.00|45
+15|Air Purifier|Sensor udara|2500000.00|25
+16|VGA|Bagus|150000.00|10
+17|Mouse|ROBOT|5000.00|1

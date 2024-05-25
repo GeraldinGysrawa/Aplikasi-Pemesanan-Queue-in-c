@@ -1,0 +1,70 @@
+Nama Pembeli: ubn
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: efw
+Alamat Email: wef
+No. Telepon: 124
+
+Nama Pembeli: fang
+Nama Barang: hp
+Jumlah: 60
+Alamat Rumah: qs.tlyklrh
+Alamat Email: mhun@nthps.jvt
+No. Telepon: 112
+
+Nama Pembeli: iky
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: ihukbun
+Alamat Email: prflthps
+No. Telepon: 1245
+
+Nama Pembeli: GERALD
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: ikn
+Alamat Email: lthpsnl
+No. Telepon: 123789
+
+Nama Pembeli: GEGE
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: ikn
+Alamat Email: lthpsnl
+No. Telepon: 1357
+
+Nama Pembeli: ZUHRI
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: wkn
+Alamat Email: lthpsgbo
+No. Telepon: 2468
+
+Nama Pembeli: NISA
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: tyk
+Alamat Email: lthpsupz
+No. Telepon: 123987
+
+Nama Pembeli: ying
+Nama Barang: Air Purifier
+Jumlah: 5
+Alamat Rumah: qs.tlyklrh
+Alamat Email: fpun@nthps.jvt
+No. Telepon: 122
+
+Nama Pembeli: zuhri
+Nama Barang: Drone
+Jumlah: 1
+Alamat Rumah: ihsp
+Alamat Email: pzhu@nthps.jvt
+No. Telepon: 123456789
+
+Nama Pembeli: yaya
+Nama Barang: Drone
+Jumlah: 7
+Alamat Rumah: qs.rk
+Alamat Email: fhfh@nthps.jvt
+No. Telepon: 119
+
