@@ -7,58 +7,62 @@
 
 // Fungsi untuk membaca file dan mengisi antrian
 void readFileToQueue(Queue *q) {
-    FILE *file = fopen("pembeli.txt", "r"); // Buka file untuk dibaca
-    if (file == NULL) { // Periksa apakah file berhasil dibuka
-        printf("Gagal membuka file.\n"); // Cetak pesan kesalahan jika file tidak bisa dibuka
+    FILE *file = fopen("pembeli.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
         return;
     }
 
-    while (!feof(file)) { // Lanjutkan sampai akhir file
-        listBarang *newNode = (listBarang*)malloc(sizeof(listBarang)); // Alokasikan memori untuk node baru
-        if (newNode == NULL) { // Periksa apakah alokasi memori berhasil
-            printf("Gagal mengalokasikan memori.\n"); // Cetak pesan kesalahan jika alokasi gagal
-            fclose(file); // Tutup file
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        address newNode = (address)malloc(sizeof(listBarang));
+        if (newNode == NULL) {
+            printf("Memory allocation failed.\n");
+            fclose(file);
             return;
         }
 
-        // Baca data dari file dan simpan di node baru
-        fscanf(file, "Nama Pembeli: %[^\n]\n", newNode->namapembeli);
-        fscanf(file, "Nama Barang: %[^\n]\n", newNode->namabarang);
-        fscanf(file, "Jumlah: %d\n", &newNode->qty);
-        fscanf(file, "Alamat Rumah: %[^\n]\n", newNode->identitas.alamatrumah);
-        fscanf(file, "Alamat Email: %[^\n]\n", newNode->identitas.alamatemail);
-        fscanf(file, "No. Telepon: %d\n\n", &newNode->identitas.notelp);
+        sscanf(buffer, "Nama Pembeli: %[^\n]\n", newNode->namapembeli);
+        fgets(buffer, sizeof(buffer), file);
+        sscanf(buffer, "Nama Barang: %[^\n]\n", newNode->namabarang);
+        fgets(buffer, sizeof(buffer), file);
+        sscanf(buffer, "Jumlah: %d\n", &newNode->qty);
+        fgets(buffer, sizeof(buffer), file);
+        sscanf(buffer, "Alamat Rumah: %[^\n]\n", newNode->identitas.alamatrumah);
+        fgets(buffer, sizeof(buffer), file);
+        sscanf(buffer, "Alamat Email: %[^\n]\n", newNode->identitas.alamatemail);
+        fgets(buffer, sizeof(buffer), file);
+        sscanf(buffer, "No. Telepon: %d\n", &newNode->identitas.notelp);
+        fgets(buffer, sizeof(buffer), file);  // To consume the empty line
 
-        newNode->next = NULL; // Setel pointer next dari node baru ke NULL
+        newNode->next = NULL;
 
-        if (q->rear == NULL) { // Periksa apakah antrian kosong
-            q->front = newNode; // Jika ya, setel front dan rear ke node baru
+        if (q->rear == NULL) {
+            q->front = newNode;
             q->rear = newNode;
         } else {
-            q->rear->next = newNode; // Jika tidak, tambahkan node baru ke akhir antrian
+            q->rear->next = newNode;
             q->rear = newNode;
         }
     }
 
-    fclose(file); // Tutup file setelah selesai
+    fclose(file);
 }
 
 
 // Fungsi untuk menampilkan antrian pembeli
 void displayPembeli(Queue *q) {
-    system("cls"); // Bersihkan layar
-    if (q->front == NULL) { // Periksa apakah antrian kosong
-        printf("Antrian pembeli kosong.\n"); // Cetak pesan jika antrian kosong
+    system("cls");
+    if (q->front == NULL) {
+        printf("Antrian pembeli kosong.\n");
         return;
     }
 
-    // Cetak header tabel
     printf("====================================================================\n");
     printf("| %-20s | %-25s | %-15s |\n", "Nama Pembeli", "Barang yang Dibeli", "Jumlah Barang");
     printf("====================================================================\n");
 
-    // Cetak setiap elemen antrian
-    listBarang *current = q->front;
+    address current = q->front;
     while (current != NULL) {
         printf("| %-20s | %-25s | %-15d |\n", current->namapembeli, current->namabarang, current->qty);
         current = current->next;
@@ -66,13 +70,12 @@ void displayPembeli(Queue *q) {
 
     printf("====================================================================\n");
 
-    // Tanya apakah ingin mencetak pesanan dari node pertama
     char option;
     printf("Apakah Anda ingin mencetak pesanan dari node pertama? (y/n): ");
     scanf(" %c", &option);
 
     if (option == 'y' || option == 'Y') {
-        listBarang *firstNode = q->front;
+        address firstNode = q->front;
 
         char decryptedAlamat[500];
         char decryptedEmail[100];
@@ -83,21 +86,20 @@ void displayPembeli(Queue *q) {
         dekripsiceasar(decryptedAlamat, 7);
         dekripsiceasar(decryptedEmail, 7);
 
-        // Cetak struk pengiriman
         printf("\n");
-        printf("==============================================================\n");
-        printf("|                      STRUK PENGIRIMAN                      |\n");
-        printf("==============================================================\n");
+        printf("=================================================================\n");
+        printf("|                      STRUK PENGIRIMAN                          |\n");
+        printf("=================================================================\n");
         printf("| %-30s: %-30s |\n", "Nama Pembeli", firstNode->namapembeli);
         printf("| %-30s: %-30s |\n", "Nama Barang", firstNode->namabarang);
         printf("| %-30s: %-30d |\n", "Jumlah Barang", firstNode->qty);
-        printf("| %-30s: %-30s |\n", "Alamat Rumah", firstNode->identitas.alamatrumah);
-        printf("| %-30s: %-30s |\n", "Alamat Email", firstNode->identitas.alamatemail);
+        printf("| %-30s: %-30s |\n", "Alamat Rumah", decryptedAlamat);
+        printf("| %-30s: %-30s |\n", "Alamat Email", decryptedEmail);
         printf("| %-30s: %-30d |\n", "No. Telepon", firstNode->identitas.notelp);
-        printf("==============================================================\n");
-        printf("|                   TERIMA KASIH ATAS PESANAN ANDA!                |\n");
-        printf("|                Silakan kunjungi kami lagi!                      |\n");
-        printf("==============================================================\n");
+        printf("=================================================================\n");
+        printf("|                   TERIMA KASIH ATAS PESANAN ANDA!              |\n");
+        printf("|                Silakan kunjungi kami lagi!                     |\n");
+        printf("=================================================================\n");
 
         // Menghapus node pertama dari antrian (memperbarui antrian)
         removeFromQueue(q);
@@ -204,6 +206,7 @@ void removeFromQueue(Queue *q) {
         deleteTempFile("pembeli_temp.txt");
         return;
     }
+
     dequeue(q);
 
     // Perbarui file pembeli.txt dengan data antrian yang baru
@@ -213,13 +216,13 @@ void removeFromQueue(Queue *q) {
         // Hapus file sementara hanya jika pembaruan file berhasil
         deleteTempFile("pembeli_temp.txt");
     } else {
-        // Jika antrian kosong setelah dequeue, maka jadikan file sementara sebagai file utama
-        if (rename("pembeli_temp.txt", "pembeli.txt") != 0) {
-            printf("Gagal mengganti file asli dengan file sementara.\n");
-            // Jika gagal, tetap gunakan file sementara sebagai file utama dan hapus file sementara
-            printf("File sementara akan tetap digunakan sebagai file utama.\n");
+        // Jika antrian kosong setelah dequeue, maka hapus isi file utama
+        FILE *file = fopen("pembeli.txt", "w");
+        if (file != NULL) {
+            fclose(file);
+            deleteTempFile("pembeli_temp.txt");
         } else {
-            printf("File sementara telah menjadi file utama.\n");
+            printf("Gagal membuka file untuk mengosongkan isinya.\n");
         }
     }
 }
