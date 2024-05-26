@@ -22,6 +22,7 @@ struct TreeNode {
 
 //Linked List
 typedef struct Node {
+	int number;
     char info[100];
     char detail[100];
     float price;
@@ -32,14 +33,15 @@ typedef struct Node {
 typedef struct List {
     Node *head;
     Node *tail;
+    int lastNumber;
 } List;
 
-
 //Queue
+typedef struct listNode *address;
 typedef struct Identitas {
     char alamatrumah[500];
     char alamatemail[100];
-    int notelp;
+    char notelp[20];
 } Identitas;
 
 typedef struct listNode {
@@ -47,12 +49,12 @@ typedef struct listNode {
     char namabarang[50];
     int qty;
     Identitas identitas;
-    struct listNode *next;
+    address next;
 } listBarang;
 
 typedef struct {
-    listBarang *front;
-    listBarang *rear;
+    address front;
+    address rear;
 } Queue;
 
 #endif

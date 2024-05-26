@@ -5,18 +5,18 @@
 #include <string.h>
 #include "global.h"
 
-void saveToFile(listBarang *node);
-void enque(Queue *q, listBarang *newNode);
-listBarang* createNode(const char *namapembeli, const char *namabarang, int qty, Identitas identitas);
+void initQueue(Queue *q);
+void enqueue(Queue *q, address newNode);
+void saveToFile(address node);
+address createNode(const char *namapembeli, const char *namabarang, int qty, Identitas identitas);
 void belibarang(Queue *q, List *list);
-void writefile(List *list);
-void readfile(List *list);
 int isValidItem(List *list, const char *name);
+void enkripsiangka(char *num, int key);
+void dekripsiangka(char *num, int key);
+
 
 //tampilan dan penggabungan
 int user();
 int admin();
-int loginuser();
-int loginadmin();
 
 #endif

@@ -4,7 +4,6 @@
 #include "annisa.h"
 
 
-
 // Fungsi untuk membaca file dan mengisi antrian
 void readFileToQueue(Queue *q) {
     FILE *file = fopen("pembeli.txt", "r");
@@ -32,7 +31,7 @@ void readFileToQueue(Queue *q) {
         fgets(buffer, sizeof(buffer), file);
         sscanf(buffer, "Alamat Email: %[^\n]\n", newNode->identitas.alamatemail);
         fgets(buffer, sizeof(buffer), file);
-        sscanf(buffer, "No. Telepon: %d\n", &newNode->identitas.notelp);
+        sscanf(buffer, "No. Telepon: %[^\n]\n", newNode->identitas.notelp);
         fgets(buffer, sizeof(buffer), file);  // To consume the empty line
 
         newNode->next = NULL;
@@ -48,7 +47,6 @@ void readFileToQueue(Queue *q) {
 
     fclose(file);
 }
-
 
 // Fungsi untuk menampilkan antrian pembeli
 void displayPembeli(Queue *q) {
@@ -79,12 +77,15 @@ void displayPembeli(Queue *q) {
 
         char decryptedAlamat[500];
         char decryptedEmail[100];
+        char decryptedNoTelp[100];
 
         strcpy(decryptedAlamat, firstNode->identitas.alamatrumah);
         strcpy(decryptedEmail, firstNode->identitas.alamatemail);
+        strcpy(decryptedNoTelp, firstNode->identitas.notelp);
 
         dekripsiceasar(decryptedAlamat, 7);
         dekripsiceasar(decryptedEmail, 7);
+        dekripsiangka(decryptedNoTelp, 7);
 
         printf("\n");
         printf("=================================================================\n");
@@ -95,7 +96,7 @@ void displayPembeli(Queue *q) {
         printf("| %-30s: %-30d |\n", "Jumlah Barang", firstNode->qty);
         printf("| %-30s: %-30s |\n", "Alamat Rumah", decryptedAlamat);
         printf("| %-30s: %-30s |\n", "Alamat Email", decryptedEmail);
-        printf("| %-30s: %-30d |\n", "No. Telepon", firstNode->identitas.notelp);
+        printf("| %-30s: %-30s |\n", "No. Telepon", decryptedNoTelp);
         printf("=================================================================\n");
         printf("|                   TERIMA KASIH ATAS PESANAN ANDA!              |\n");
         printf("|                Silakan kunjungi kami lagi!                     |\n");
@@ -158,7 +159,7 @@ void updateFile(Queue *q) {
         fprintf(file, "Jumlah: %d\n", current->qty);
         fprintf(file, "Alamat Rumah: %s\n", current->identitas.alamatrumah);
         fprintf(file, "Alamat Email: %s\n", current->identitas.alamatemail);
-        fprintf(file, "No. Telepon: %d\n\n", current->identitas.notelp);
+        fprintf(file, "No. Telepon: %s\n\n", current->identitas.notelp);
         current = current->next;
     }
 
@@ -209,7 +210,8 @@ void removeFromQueue(Queue *q) {
 
     dequeue(q);
 
-    // Perbarui file pembeli.txt dengan data antrian yang baru
+    // Perbarui file pembeli.txt dengan data antrian
+
     if (q->front != NULL) {
         // Jika ada data yang akan ditulis ke file, maka update file
         updateFile(q);
@@ -237,6 +239,3 @@ void removeFromQueue(Queue *q) {
 //     // Cetak pesan bahwa pembeli telah dikeluarkan dan file diperbarui
 //     printf("Pembeli telah dikeluarkan dari antrian dan file telah diperbarui.\n");
 // }
-
-
-

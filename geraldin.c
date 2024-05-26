@@ -1,27 +1,18 @@
 #include "geraldin.h"
 #include "annisa.h"
 #include "rizky.h"
+#include "dhea.h"
+#include "global.h"
+#include <ctype.h>
 
-// Function definitions
-void saveToFile(listBarang *node) {
-    FILE *file = fopen("pembeli.txt", "a");
-    if (file == NULL) {
-        printf("Error opening file!\n");
-        return;
-    }
 
-    fprintf(file, "Buyer Name: %s\n", node->namapembeli);
-    fprintf(file, "Item Name: %s\n", node->namabarang);
-    fprintf(file, "Quantity: %d\n", node->qty);
-    fprintf(file, "Home Address: %s\n", node->identitas.alamatrumah);
-    fprintf(file, "Email Address: %s\n", node->identitas.alamatemail);
-    fprintf(file, "Phone Number: %d\n", node->identitas.notelp);
-    fprintf(file, "\n");
-
-    fclose(file);
+void initQueue(Queue *q) {
+    q->front = NULL;
+    q->rear = NULL;
 }
-listBarang* createNode(const char *namapembeli, const char *namabarang, int qty, Identitas identitas) {
-    listBarang *newNode = (listBarang*)malloc(sizeof(listBarang));
+
+address createNode(const char *namapembeli, const char *namabarang, int qty, Identitas identitas) {
+    address newNode = (address)malloc(sizeof(listBarang));
     if (newNode == NULL) {
         printf("Memory allocation failed.\n");
         return NULL;
@@ -34,7 +25,12 @@ listBarang* createNode(const char *namapembeli, const char *namabarang, int qty,
     return newNode;
 }
 
-void enque(Queue *q, listBarang *newNode) {
+int isValidItem(List *list, const char *name) {
+    return cari(list, name) != NULL;
+}
+
+
+void enqueue(Queue *q, address newNode) {
     if (q->rear == NULL) {
         q->front = newNode;
         q->rear = newNode;
@@ -46,113 +42,173 @@ void enque(Queue *q, listBarang *newNode) {
     saveToFile(newNode);
 }
 
+
 void belibarang(Queue *q, List *list) {
     char namapembeli[50];
-    char namabarang[50];
+    int nomorBarang;
     int qty;
     Identitas identitas;
-    char confirm;
+    
+    printf("Masukan Nama Anda: ");
+    while (getchar() != '\n');  // Membersihkan buffer stdin
+    fgets(namapembeli, sizeof(namapembeli), stdin);
+    strtok(namapembeli, "\n"); 
 
-    printf("Enter buyer name: ");
-    scanf("%s", namapembeli);
-
-    // Input valid item name
-    Node *itemNode;
+    // Input valid item number
+    Node *itemNode = NULL;
     do {
-        printf("Enter item name: ");
-        scanf("%s", namabarang);
-        itemNode = search(list, namabarang);
-        if (itemNode == NULL) {
-            printf("Nama barang tidak valid. Silakan coba lagi.\n");
+        printf("Masukan nomor barang yang ingin dibeli: ");
+        scanf("%d", &nomorBarang);
+        
+        // Cari nomor barang dalam list
+        Node *current = list->head;
+        while (current != NULL) {
+            if (current->number == nomorBarang) {
+                itemNode = current;
+                break;
+            }
+            current = current->next;
         }
+        
+        if (itemNode == NULL) {
+            printf("Nomor barang tidak valid. Silakan coba lagi.\n");
+        }
+        
+        // Membersihkan buffer stdin
+        while (getchar() != '\n');
     } while (itemNode == NULL);
 
     // Input valid quantity
     do {
-        printf("Enter quantity: ");
+        printf("Masukan jumlah barang yang ingin dibeli: ");
         scanf("%d", &qty);
         if (qty > itemNode->available) {
             printf("Stok barang tidak cukup. Silakan masukkan jumlah yang lebih kecil.\n");
         }
+        // Membersihkan buffer stdin
+        while (getchar() != '\n');
     } while (qty > itemNode->available);
 
-    // Calculate total price
-    float totalPrice = qty * itemNode->price;
-    printf("Anda yakin ingin membeli barang '%s' dengan total harga %.2f? (y/n): ", namabarang, totalPrice);
-    while (getchar() != '\n'); // Clear input buffer
-    scanf("%c", &confirm);
+    // Verifikasi pembelian
+    printf("Anda akan membeli barang '%s' sebanyak %d dengan total harga %.2f. Apakah Anda yakin? (y/n):  ", itemNode->info, qty, qty * itemNode->price);
+    char confirm;
+    scanf(" %c", &confirm);
+    
+    // Membersihkan buffer stdin
+    while (getchar() != '\n'); 
 
     if (confirm == 'y' || confirm == 'Y') {
-        printf("Enter home address: ");
-        scanf("%s", identitas.alamatrumah);
-        printf("Enter email address: ");
-        scanf("%s", identitas.alamatemail);
-        printf("Enter phone number: ");
-        scanf("%d", &identitas.notelp);
-        printf("Pemesanan anda sudah selesai.");
+        printf("Masukan alamat rumah anda: ");
+        fgets(identitas.alamatrumah, sizeof(identitas.alamatrumah), stdin);
+        strtok(identitas.alamatrumah, "\n"); 
 
-        // Update item stock
+        // email
+        bool emailValidd = false;
+        do {
+            printf("Masukkan alamat email Anda (@gmail.com): ");
+            scanf("%s", identitas.alamatemail);
+            
+            if (!emailValid(identitas.alamatemail)){
+                printf("Alamat email tidak valid.\n");
+            } else {
+                emailValidd = true;
+            }
+        } while (!emailValidd);
+
+        // Validasi nomor telepon
+        bool isPhoneNumberValid = false;
+        do {
+            printf("Masukan No telepon anda: ");
+            fgets(identitas.notelp, sizeof(identitas.notelp), stdin);
+            strtok(identitas.notelp, "\n"); // Menghapus newline character dari input
+            
+            isPhoneNumberValid = true;
+            for (int i = 0; identitas.notelp[i] != '\0'; i++) {
+                if (!isdigit(identitas.notelp[i])) {
+                    printf("Nomor telepon harus berupa angka. Silakan coba lagi.\n");
+                    isPhoneNumberValid = false;
+                    break;
+                }
+            }
+        } while (!isPhoneNumberValid);
+
         itemNode->available -= qty;
         writefile(list);
 
-        // Create and enqueue new node
-        listBarang *newNode = createNode(namapembeli, namabarang, qty, identitas);
+        address newNode = createNode(namapembeli, itemNode->info, qty, identitas);
         if (newNode != NULL) {
-            enque(q, newNode);
+            enqueue(q, newNode);
         }
     } else {
         printf("Pembelian dibatalkan.\n");
     }
 }
 
+void saveToFile(address node) {
+    FILE *history = fopen("history.txt", "a");
+    if (history == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+    
+    fprintf(history, "Nama Pembeli: %s\n", node->namapembeli);
+    fprintf(history, "Nama Barang: %s\n", node->namabarang);
+    fprintf(history, "Jumlah: %d\n", node->qty);
+    fprintf(history, "Alamat Rumah: %s\n", node->identitas.alamatrumah);
+    fprintf(history, "Alamat Email: %s\n", node->identitas.alamatemail);
+    fprintf(history, "No. Telepon: %s\n", node->identitas.notelp);
+    fprintf(history, "\n");
+    
+    fclose(history);
 
-int isValidItem(List *list, const char *name) {
-    return search(list, name) != NULL;
-}
-
-void writefile(List *list) {
-    FILE *file = fopen("jualan.txt", "w");
+    FILE *file = fopen("pembeli.txt", "a");
     if (file == NULL) {
-        printf("Gagal membuka file.\n");
+        printf("Error opening file!\n");
         return;
     }
 
-    Node *current = list->head;
-    while (current != NULL) {
-        fprintf(file, "%s|%s|%.2f|%d\n", current->info, current->detail, current->price, current->available);
-        current = current->next;
-    }
+    char encryptedAlamat[100];
+    char encryptedEmail[100];
+    char encryptedNoTelp[100];
+
+    // Enkripsi alamat rumah, alamat email, dan nomor telepon
+    strcpy(encryptedAlamat, node->identitas.alamatrumah);
+    strcpy(encryptedEmail, node->identitas.alamatemail);
+    strcpy(encryptedNoTelp, node->identitas.notelp); 
+    
+    enkripsiceasar(encryptedAlamat, 7);
+    enkripsiceasar(encryptedEmail, 7);
+    enkripsiangka(encryptedNoTelp, 7);
+
+
+    // Simpan ke file
+    fprintf(file, "Nama Pembeli: %s\n", node->namapembeli);
+    fprintf(file, "Nama Barang: %s\n", node->namabarang);
+    fprintf(file, "Jumlah: %d\n", node->qty);
+    fprintf(file, "Alamat Rumah: %s\n", encryptedAlamat);
+    fprintf(file, "Alamat Email: %s\n", encryptedEmail);
+    fprintf(file, "No. Telepon: %s\n", encryptedNoTelp);
+    fprintf(file, "\n");
 
     fclose(file);
 }
 
-void readfile(List *list) {
-    FILE *file = fopen("jualan.txt", "r");
-    if (file == NULL) {
-        printf("Gagal membuka file.\n");
-        return;
-    }
 
-    char line[200];
-    while (fgets(line, sizeof(line), file) != NULL) {
-        Node *newNode = (Node*)malloc(sizeof(Node));
-        if (newNode == NULL) {
-            printf("Memory allocation failed.\n");
-            fclose(file);
-            return;
-        }
 
-        sscanf(line, "%[^|]|%[^|]|%f|%d", newNode->info, newNode->detail, &newNode->price, &newNode->available);
-        newNode->next = NULL;
-
-        if (list->head == NULL) {
-            list->head = newNode;
-            list->tail = newNode;
-        } else {
-            list->tail->next = newNode;
-            list->tail = newNode;
+void enkripsiangka(char *num, int key){
+    for (int i = 0; num[i] != '\0'; i++) {
+        if (num[i] >= '0' && num[i] <= '9'){
+            num[i] = '0' + ((num[i] - '0' + key) % 10);
         }
     }
-
-    fclose(file);
 }
+
+void dekripsiangka(char *num, int key){
+    for (int i = 0; num[i] != '\0'; i++){
+        if (num[i] >= '0' && num[i] <= '9'){
+            num[i] = '0' + ((num[i] - '0' - key + 10) % 10);
+        }
+    }
+}
+
+
