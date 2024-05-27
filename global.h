@@ -36,6 +36,9 @@ typedef struct List {
     int lastNumber;
 } List;
 
+
+
+
 //Queue
 typedef struct listNode *address;
 typedef struct Identitas {

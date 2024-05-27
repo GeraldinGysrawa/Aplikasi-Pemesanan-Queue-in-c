@@ -1,1 +1,0 @@
-# Aplikasi-Pemesanan-Queue-in-c

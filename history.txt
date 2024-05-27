@@ -1,0 +1,71 @@
+Nama Pembeli: GEGE
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: ikn
+Alamat Email: lthpsnl
+No. Telepon: 1357
+
+Nama Pembeli: ZUHRI
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: pdg
+Alamat Email: emailzuh
+No. Telepon: 2468
+
+Nama Pembeli: NISA
+Nama Barang: hp
+Jumlah: 1
+Alamat Rumah: mrd
+Alamat Email: emailnis
+No. Telepon: 123987
+
+Nama Pembeli: ying
+Nama Barang: Air Purifier
+Jumlah: 5
+Alamat Rumah: jl.merdeka
+Alamat Email: ying@gmail.com
+No. Telepon: 122
+
+Nama Pembeli: zuhri
+Nama Barang: Drone
+Jumlah: 1
+Alamat Rumah: bali
+Alamat Email: isan@gmail.com
+No. Telepon: 123456789
+
+Nama Pembeli: Geraldin
+Nama Barang: Laptop
+Jumlah: 5
+Alamat Rumah: geraldin
+Alamat Email: geraldin@gmail.com
+No. Telepon: 0821118463943
+
+Nama Pembeli: Geraldin
+Nama Barang: 
+Jumlah: 2
+Alamat Rumah: geraldin
+Alamat Email: geraldin@gmail.com
+No. Telepon: 082118463943
+
+Nama Pembeli: Geraldin
+Nama Barang: Laptop
+Jumlah: 3
+Alamat Rumah: ciwaruga
+Alamat Email: geraldin@gmail.com
+No. Telepon: 082118473943
+
+Nama Pembeli: Geraldin
+Nama Barang: Laptop
+Jumlah: 2
+Alamat Rumah: 
+
+Alamat Email: geraldin@gmail.com
+No. Telepon: 082118463943
+
+Nama Pembeli: Geraldin
+Nama Barang: Laptop
+Jumlah: 2
+Alamat Rumah: ciwaruga
+Alamat Email: geraldin@gmail.com
+No. Telepon: 082118463943
+

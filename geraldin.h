@@ -8,7 +8,7 @@
 void initQueue(Queue *q);
 void enqueue(Queue *q, address newNode);
 void saveToFile(address node);
-address createNode(const char *namapembeli, const char *namabarang, int qty, Identitas identitas);
+address createNode(char *namapembeli, char *namabarang, int qty, Identitas identitas);
 void belibarang(Queue *q, List *list);
 int isValidItem(List *list, const char *name);
 void enkripsiangka(char *num, int key);

@@ -1,0 +1,52 @@
+# Project: Aplikasi Pemesanan
+# Makefile created by Embarcadero Dev-C++ 6.3
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = admin.o annisa.o dhea.o geraldin.o global.o ikhsan.o main.o rizky.o user.o
+LINKOBJ  = admin.o annisa.o dhea.o geraldin.o global.o ikhsan.o main.o rizky.o user.o
+LIBS     = -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib" -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc
+INCS     = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
+CXXINCS  = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
+BIN      = "Aplikasi Pemesanan.exe"
+CXXFLAGS = $(CXXINCS) 
+CFLAGS   = $(INCS) 
+DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\DevCpp.exe INTERNAL_DEL
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${DEL} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+admin.o: admin.c
+	$(CC) -c admin.c -o admin.o $(CFLAGS)
+
+annisa.o: annisa.c
+	$(CC) -c annisa.c -o annisa.o $(CFLAGS)
+
+dhea.o: dhea.c
+	$(CC) -c dhea.c -o dhea.o $(CFLAGS)
+
+geraldin.o: geraldin.c
+	$(CC) -c geraldin.c -o geraldin.o $(CFLAGS)
+
+global.o: global.c
+	$(CC) -c global.c -o global.o $(CFLAGS)
+
+ikhsan.o: ikhsan.c
+	$(CC) -c ikhsan.c -o ikhsan.o $(CFLAGS)
+
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)
+
+rizky.o: rizky.c
+	$(CC) -c rizky.c -o rizky.o $(CFLAGS)
+
+user.o: user.c
+	$(CC) -c user.c -o user.o $(CFLAGS)

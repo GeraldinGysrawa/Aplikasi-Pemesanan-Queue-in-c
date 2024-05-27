@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,79 +6,103 @@
 #include <ctype.h>
 #include <conio.h>
 #include "global.h"
+#include "dhea.h"
+#define MAX 100
 
 #define MAX 100
 
-// Fungsi decryptPassword untuk Caesar Cipher
-void decryptPassword(char *encrypted_password, char *decrypted_password) {
-    int shift = 3; // Shift untuk Caesar Cipher
-    int i;
-    for (i = 0; encrypted_password[i] != '\0'; ++i) {
-        char ch = encrypted_password[i];
-        if (ch >= 'a' && ch <= 'z') {
-            decrypted_password[i] = ((ch - 'a' - shift + 26) % 26) + 'a';
-        } else if (ch >= 'A' && ch <= 'Z') {
-            decrypted_password[i] = ((ch - 'A' - shift + 26) % 26) + 'A';
-        } else {
-            decrypted_password[i] = ch;
-        }
+/*
+	^ Binary Search Tree
+	^ temp : pointer
+	^ alokasikan tempat jika NULL dan isikan data dan index
+	^ index yang lebih kecil menjadi left son
+	^ index yang lebih besar menjadi rightson
+*/
+struct NodeRegist* insertRegist(struct NodeRegist* node, char data, int index) {
+    if (node == NULL) {
+        struct NodeRegist* temp = (struct NodeRegist*)malloc(sizeof(struct NodeRegist));
+        temp->data = data;
+        temp->index = index;
+        temp->left = temp->right = NULL;
+        return temp;
     }
-    decrypted_password[i] = '\0'; // Menambahkan null terminator
+    if (index < node->index)
+        node->left = insertRegist(node->left, data, index);
+    else
+        node->right = insertRegist(node->right, data, index);
+    return node;
 }
 
-// Fungsi encryptPassword untuk Caesar Cipher
-void encryptPassword(char *password, char *encrypted_password) {
-    int shift = 3; // Shift untuk Caesar Cipher
-    int i;
-    for (i = 0; password[i] != '\0'; ++i) {
-        char ch = password[i];
-        if (ch >= 'a' && ch <= 'z') {
-            encrypted_password[i] = ((ch - 'a' + shift) % 26) + 'a';
-        } else if (ch >= 'A' && ch <= 'Z') {
-            encrypted_password[i] = ((ch - 'A' + shift) % 26) + 'A';
-        } else {
-            encrypted_password[i] = ch;
-        }
+/*
+	^ Dilakukan ketika root tidak NULL
+	^ left-son -- right-son -- parent
+	^ alokasikan tempat jika NULL dan isikan data dan index
+	^ index yang lebih kecil menjadi left son
+	^ index yang lebih besar menjadi rightson
+*/
+void postorderTraversal(struct NodeRegist* root, char* password, int* pos) {
+    if (root != NULL) {
+        postorderTraversal(root->left, password, pos);
+        postorderTraversal(root->right, password, pos);
+        password[(*pos)++] = root->data;
     }
-    encrypted_password[i] = '\0'; // Menambahkan null terminator
 }
 
-// Fungsi untuk memeriksa kredensial
-bool checkCredentials(char *username, char *password, const char *file_name) {
-    FILE *file = fopen(file_name, "r"); // Buka file
-
-    if (file == NULL) {
-        printf("Gagal membuka file.\n");
-        return false;
-    }
-
-    char line[MAX];
-    while (fgets(line, sizeof(line), file) != NULL) {
-        char saved_username[MAX];
-        char saved_encrypted_password[MAX];
-
-        // Memindai username dan password terenkripsi dari setiap baris dalam file
-        sscanf(line, "%*s %*s %s %s", saved_username, saved_encrypted_password);
-
-        // Dekripsi password yang tersimpan dalam file
-        char decrypted_password[MAX];
-        decryptPassword(saved_encrypted_password, decrypted_password);
-
-        // Bandingkan username dan password yang telah terdekripsi dengan input pengguna
-        if (strcmp(saved_username, username) == 0 && strcmp(decrypted_password, password) == 0) {
-            fclose(file);
-            printf("Login berhasil!\n");
-            return true; // username dan password cocok
-        }
-    }
-
-    fclose(file);
-    printf("Login gagal. Username atau password salah.\n");
-    return false; // Username dan password tidak cocok
+/*
+	^ var result : menyimpan hasil trav (static : mempertahankan nilai nilai)
+	^ pos : melacak posisi dlm array
+	^ alokasikan tempat jika NULL dan isikan data dan index
+	^ index yang lebih kecil menjadi left son
+	^ index yang lebih besar menjadi rightson
+*/
+char* postorder(struct NodeRegist* root) {
+    static char result[100]; 
+    int pos = 0;
+    postorderTraversal(root, result, &pos);
+    result[pos] = '\0'; 
+    return result;
 }
 
-// Fungsi untuk memeriksa validitas email
-bool isEmailValid(char *email) {
+/* 
+	^ pass yang telah terenkrip oleh traversal inorder, akan di enkrip lagi oleh caesar chiper
+	^ caesar chiper akan mengubah posisi char dalam string dengan 3
+	^ enkripsi yang dilakukan di fitur ini dilakukan sebanyak 2 kali;
+	^ oleh traversal inorder & caesar chiper 
+*/
+void caesarchiper(char* pass, int len) {
+    for (int i = 0; i < len; i++) {
+        if (pass[i] >= 'A' && pass[i] <= 'Z') {
+            pass[i] = pass[i] + 3;
+        } else if (pass[i] >= 'a' && pass[i] <= 'z') {
+            pass[i] = pass[i] + 3;
+        }
+    }
+}
+
+
+char* encryptPassword(char *pass) {
+    int len = strlen(pass);
+
+    /* 
+		^ pointer : root (NULL)
+		^ iterasi insert pass ke tree 
+	*/
+    struct NodeRegist *root = NULL;
+    for (int i = 0; i < len; i++) {
+        root = insertRegist(root, pass[i], i);
+    }
+
+    /* 
+		^ hasil postorder disimpan di pass
+	*/
+    pass = postorder(root);
+	caesarchiper(pass, len);
+
+    return pass;
+}
+
+// cek email
+bool emailValid(char *email) {
     int i, atCount = 0;
     int len = strlen(email);
     if (email[0] == '@' || email[len - 1] == '@') {
@@ -98,8 +123,8 @@ bool isEmailValid(char *email) {
     return true;
 }
 
-// Fungsi untuk memeriksa keberadaan username
-bool isUsernameExists(char *username, const char *filename) {
+// cek usn
+bool usnValid(char *username, const char *filename) {
     if (strlen(username) > 20) {
         printf("Username cannot be longer than 20 characters.\n");
         return true;
@@ -122,8 +147,8 @@ bool isUsernameExists(char *username, const char *filename) {
     return false;
 }
 
-// Fungsi untuk memeriksa apakah password alfanumerik
-bool isAlphaNumeric(char *password) {
+// cek pass
+bool alphaNumeric(char *password) {
     bool hasLetter = false;
     bool hasDigit = false;
     int length = 0;
@@ -141,87 +166,185 @@ bool isAlphaNumeric(char *password) {
     return length >= 8 && hasLetter && hasDigit;
 }
 
-// Fungsi Login untuk Admin dan User
-bool Login(bool isAdmin) {
-    char username[20];
-    char password[20];
-
-    printf("Enter username: ");
-    scanf("%s", username);
-    printf("Enter password: ");
-    scanf("%s", password);
-
-    const char *filename = isAdmin ? "file_admin1.3.txt" : "file_user1.3.txt";
-    if (checkCredentials(username, password, filename)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// Fungsi Register untuk Admin dan User
+// register
 void Register(int index, bool isAdmin) {
     char email[30];
-    char password[20];
-    struct users user[100];
+    char pass[20];
+    struct usersRegist user[100];
     if (index >= 100) {
-        printf("User limit reached.\n");
+        printf("Batas jumlah pengguna tercapai.\n");
         return;
     }
-
+    
+    //tampilan regist
     system("cls");
-    printf("\tRegister Account\n\n");
-    printf("Enter your name: ");
+    printf("\t\t\t\t-------------------------------------------------------------------\n");
+    printf("\t\t\t\t======================== R E G I S T E R ==========================\n");
+    printf("\t\t\t\t-------------------------------------------------------------------\n");
+    printf("\t\t\t\t|                          GERALD STORE                           |\n");
+    printf("\t\t\t\t-------------------------------------------------------------------\n");
+
+    printf("\t\t\t\t Masukkan nama Anda : ");
     scanf("%s", user[index].Nama);
 
-    bool isValidEmail = false;
+	//email
+    bool emailValidd = false;
     do {
-        printf("Enter email (@gmail.com): ");
+    	printf("\t\t\t\t Masukkan alamat email Anda (@gmail.com):");
         scanf("%s", email);
-        if (!isEmailValid(email)) {
-            printf("Invalid email address.\n");
+        
+        if (!emailValid(email)){
+            printf("\t\t\t\t Alamat email tidak valid.\n");
         } else {
-            isValidEmail = true;
+            emailValidd = true;
         }
-    } while (!isValidEmail);
+    } while (!emailValidd);
+    
     strcpy(user[index].Email, email);
-
-    bool isUsernameValid = false;
+				
+	//username
+    bool usnValidd = false;
     const char *filename = isAdmin ? "file_admin1.3.txt" : "file_user1.3.txt";
     do {
-        printf("Enter username: ");
-        scanf("%s", user[index].username);
-        if (isUsernameExists(user[index].username, filename)) {
-            printf("Username already exists. Enter another username.\n");
+    	printf("\t\t\t\t Masukkan username : ");
+        scanf("%s", user[index].usn);
+        
+        if (usnValid(user[index].usn, filename)) {
+            printf("\t\t\t\t Username sudah ada, masukkan username lain!\n");
         } else {
-            isUsernameValid = true;
+            usnValidd = true;
         }
-    } while (!isUsernameValid);
+        
+    } while (!usnValidd);
 
-    char plain_password[MAX];
-    bool isValidPassword = false;
+	//password
+    char plain_pass[MAX];
+    bool passValid = false;
     do {
-        printf("Enter password (Minimum 8 characters, containing both letters and numbers): ");
-        scanf("%s", password);
-        if (!isAlphaNumeric(password)) {
-            printf("Password does not meet the criteria.\n");
+    	printf("\t\t\t\t Masukkan password : ");
+        scanf("%s", pass);
+        if (!alphaNumeric(pass)) {
+            printf("\t\t\t\t Password minimum 8 karakter dan terdiri dari huruf dan angka.\n");
         } else {
-            isValidPassword = true;
+            passValid = true;
         }
-    } while (!isValidPassword);
+    } while (!passValid);
+	
+	//copy ke array
+    strcpy(user[index].pass, pass);
+    strcpy(plain_pass, pass);
 
-    strcpy(user[index].password, password);
-    strcpy(plain_password, password);
-
-    char encrypted_password[MAX];
-    encryptPassword(plain_password, encrypted_password);
+	char anjiang[MAX];
+	strcpy(anjiang,encryptPassword(pass));
+	getchar();
 
     FILE *f_B;
     f_B = fopen(filename, "a");
-    fprintf(f_B, "%s %s %s %s\n", user[index].Nama, user[index].Email, user[index].username, encrypted_password);
+    if (f_B == NULL) {
+        printf("\t\t\t\t File tidak dapat dibuka.\n");
+        return;
+    }
+    getchar();
+    fprintf(f_B, "%s %s %s %s\n", user[index].Nama, user[index].Email, user[index].usn, anjiang);
     fclose(f_B);
 
     index++;
-    printf("\nRegistration Successful\n");
+    printf("\n");
+    printf("\t\t\t\t Register Sukses!\n");
     getchar();
+}
+
+// login user
+bool Login(bool isAdmin) {
+    char usn[20];
+    char pass[20];
+    char encrypted_password[MAX];
+    char passTersimpan[MAX];
+	
+	//tampilan login
+    system("cls");
+    printf("\t\t\t\t-------------------------------------------------------------------\n");
+    printf("\t\t\t\t=========================== L O G I N =============================\n");
+    printf("\t\t\t\t-------------------------------------------------------------------\n");
+    printf("\t\t\t\t|                          GERALD STORE                           |\n");
+    printf("\t\t\t\t-------------------------------------------------------------------\n");
+    
+    printf("\t\t\t\t Masukkan username : ");
+    scanf("%s", usn);
+    printf("\t\t\t\t Masukkan password : ");
+    scanf("%s", pass);
+	
+	//copy ke array
+	char anjiang[MAX];
+	strcpy(anjiang, encryptPassword(pass));
+	getchar();
+	
+    const char *filename = isAdmin ? "file_admin1.3.txt" : "file_user1.3.txt";
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("File tidak bisa dibuka.\n");
+        return false;
+    }
+
+    char line[100];
+    while (fgets(line, sizeof(line), file) != NULL) {
+        char usnTersimpan[20];
+        sscanf(line, "%*s %*s %s %s", usnTersimpan, passTersimpan);
+        if (strcmp(usnTersimpan, usn) == 0 && strcmp(passTersimpan, anjiang) == 0) {
+            fclose(file);
+            return true;
+        }
+    }
+    
+    fclose(file);
+    return false;
+}
+
+//login admin
+bool LoginAdmin() {
+    char usn[20];
+    char pass[20];
+    char encryptedPass[MAX];   						//menyimpan pass yang sudah dienkripsi setelah admin input
+    const char storedUsn[] = "Geraldin";
+    const char storedPass[] = "Geraldin12321";
+	
+	/*
+		^ 'encrypted_stored_pass[MAX]' : menyimpan pass yang sudah dienkripsi dari stored_pass
+		^ 'strdup(stored_pass)' : membuat salinan
+		^ menyimpan hasil enkripsi di 'encrypted_stored_pass'
+	*/
+	char encStoredPass[MAX];				
+    strcpy(encStoredPass, encryptPassword(strdup(storedPass)));	
+	
+    
+    // tampilan login
+    system("cls");
+    printf("\t\t\t\t-------------------------------------------------------------------\n");
+    printf("\t\t\t\t=========================== L O G I N =============================\n");
+    printf("\t\t\t\t-------------------------------------------------------------------\n");
+    printf("\t\t\t\t|                          GERALD STORE                           |\n");
+    printf("\t\t\t\t-------------------------------------------------------------------\n");
+    
+    printf("\t\t\t\t Masukkan username : ");
+    scanf("%s", usn);
+    printf("\t\t\t\t Masukkan password : ");
+    scanf("%s", pass);
+	
+	/*
+		^ 'encryptPassword(pass)' : melakukan enkripsi pass yang diinput admin
+		^ 'encryptedaPass' : menyimpan hasil enkripsi yang diinput admin
+		^ menyimpan hasil enkripsi di 'encrypted_stored_pass'
+	*/
+    strcpy(encryptedPass, encryptPassword(pass));
+	
+    /*
+		^ 'strcmp(usn, stored_usn)' : membandingkan usn
+		^ 'strcmp(encryptedPass, encrypted_stored_pass)' : membandingkan pass
+		^ jika sama hasil : 0 (true)
+	*/
+    if (strcmp(usn, storedUsn) == 0 && strcmp(encryptedPass, encStoredPass) == 0) {
+        return true;
+    }
+    
+    return false;
 }

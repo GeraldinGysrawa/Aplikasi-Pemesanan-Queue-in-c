@@ -1,6 +1,34 @@
 #include "annisa.h"
 #include "rizky.h"
 
+void dekripsiceasar(char *kalimat, int key)
+{
+	int i;
+    for (i = 0; kalimat[i] != '\0'; i++)
+    {
+        if (kalimat[i] >= 'A' && kalimat[i] <= 'Z')
+        {
+            kalimat[i] = 'A' + ((kalimat[i] - 'A' - key + 26) % 26);
+        }
+        else if (kalimat[i] >= 'a' && kalimat[i] <= 'z')
+        {
+            kalimat[i] = 'a' + ((kalimat[i] - 'a' - key + 26) % 26);
+        }
+    }
+}
+
+void enkripsiceasar(char *kalimat, int key) 
+{
+	int i;
+    for (i = 0; kalimat[i] != '\0'; i++) {
+        if (kalimat[i] >= 'A' && kalimat[i] <= 'Z') {
+            kalimat[i] = 'A' + ((kalimat[i] - 'A' + key) % 26);
+        } else if (kalimat[i] >= 'a' && kalimat[i] <= 'z') {
+            kalimat[i] = 'a' + ((kalimat[i] - 'a' + key) % 26);
+        }
+    }
+}
+
 void disList(List *list) 
 {
     FILE *file = fopen("jualan.txt", "r");
@@ -9,10 +37,9 @@ void disList(List *list)
         printf("Gagal membuka file.\n");
         return;
     }
-
     printf("List Barang: \n");
     printf("\n===========================================================================\n");
-    printf("| %-20s | %-15s | %-10s | %-5s |\n", "Nama Barang", "Dekripsi", "Harga (Rp)", "Stok");
+    printf("| %-5s | %-20s | %-15s | %-12s | %-5s |\n", "No", "Nama Barang", "Dekripsi", "Harga (Rp)", "Stok");
     printf("===========================================================================\n");
 
     // Read data from file and populate the list
@@ -25,7 +52,7 @@ void disList(List *list)
             printf("Memory allocation failed.\n");
             break;
         }
-        sscanf(line, "%[^|]|%[^|]|%f|%d", newNode->info, newNode->detail, &newNode->price, &newNode->available);
+        sscanf(line, "%d|%[^|]|%[^|]|%f|%d", &newNode->number, newNode->info, newNode->detail, &newNode->price, &newNode->available);
         newNode->next = NULL;
 
         // Find the node in the list
@@ -33,11 +60,12 @@ void disList(List *list)
         Node *prev = NULL;
         while (current != NULL) 
 		{
-            if (strcmp(current->info, newNode->info) == 0) 
+            if (current->number == newNode->number) 
 			{
                 // Update the stock
                 current->available = newNode->available;
-                break;
+                free(newNode);
+				break;
             }
             prev = current;
             current = current->next;
@@ -54,6 +82,13 @@ void disList(List *list)
                 list->tail->next = newNode;
                 list->tail = newNode;
             }
+        } 
+//		else {
+//            free(newNode); // Node already exists, free the allocated memory
+//        }
+         // Update the lastNumber to the highest number found in the file
+        if (newNode->number > list->lastNumber) {
+            list->lastNumber = newNode->number;
         }
     }
 
@@ -63,11 +98,12 @@ void disList(List *list)
     Node *current = list->head;
     while (current != NULL) 
 	{
-        printf("| %-20s | %-15s | %-10.2f | %-5d |\n", current->info, current->detail, current->price, current->available);
+        printf("| %-5d | %-20s | %-15s | %-12.2f  | %-5d |\n", current->number, current->info, current->detail, current->price, current->available);
         current = current->next;
     }
 
     printf("===========================================================================\n");
+    getch();
 }
 
 void history(Queue *q) 
@@ -118,12 +154,14 @@ void history(Queue *q)
 	} while (opsi != 2);
 }
 
-void clearHistory() {
+void clearHistory() 
+{
     FILE *file;
 
     // Membuka file dalam mode write untuk menghapus semua isinya
     file = fopen("history.txt", "w");
-    if (file == NULL) {
+    if (file == NULL) 
+	{
         perror("Error opening file");
         return;
     }

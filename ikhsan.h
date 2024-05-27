@@ -12,5 +12,4 @@ void updateFile(Queue *q);
 void copyFileContents(const char *sourceFile, const char *destinationFile);
 void deleteTempFile(const char *filename);
 void removeFromQueue(Queue *q);
-
 #endif

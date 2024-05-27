@@ -11,7 +11,7 @@ void initQueue(Queue *q) {
     q->rear = NULL;
 }
 
-address createNode(const char *namapembeli, const char *namabarang, int qty, Identitas identitas) {
+address createNode(char *namapembeli, char *namabarang, int qty, Identitas identitas) {
     address newNode = (address)malloc(sizeof(listBarang));
     if (newNode == NULL) {
         printf("Memory allocation failed.\n");
@@ -103,17 +103,19 @@ void belibarang(Queue *q, List *list) {
         strtok(identitas.alamatrumah, "\n"); 
 
         // email
-        bool emailValidd = false;
+         bool emailValid = false;
         do {
             printf("Masukkan alamat email Anda (@gmail.com): ");
-            scanf("%s", identitas.alamatemail);
-            
-            if (!emailValid(identitas.alamatemail)){
-                printf("Alamat email tidak valid.\n");
+            fgets(identitas.alamatemail, sizeof(identitas.alamatemail), stdin);
+            strtok(identitas.alamatemail, "\n");  // Menghapus newline character dari input
+
+            // Memverifikasi format email
+            if (strstr(identitas.alamatemail, "@gmail.com") == NULL) {
+                printf("Alamat email harus berakhir dengan @gmail.com. Silakan coba lagi.\n");
             } else {
-                emailValidd = true;
+                emailValid = true;
             }
-        } while (!emailValidd);
+        } while (!emailValid);
 
         // Validasi nomor telepon
         bool isPhoneNumberValid = false;

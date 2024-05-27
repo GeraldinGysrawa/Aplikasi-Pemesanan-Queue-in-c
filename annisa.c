@@ -1,6 +1,17 @@
 #include "annisa.h"
 
-Node* search(List *list, const char *name) {
+Node* search(List *list, int *number) {
+    Node *current = list->head;
+    while (current != NULL) {
+        if (current->number == number) {
+            return current;
+        }
+        current = current->next;
+    }
+    return NULL; // Barang tidak ditemukan
+}
+
+Node* cari(List *list, const char *name) {
     Node *current = list->head;
     while (current != NULL) {
         if (strcmp(current->info, name) == 0) {
@@ -11,25 +22,64 @@ Node* search(List *list, const char *name) {
     return NULL; // Barang tidak ditemukan
 }
 
+int isDuplicateItem(List *list, const char *name) {
+    Node *current = list->head;
+    while (current != NULL) {
+        if (strcmp(current->info, name) == 0) {
+            return 1; // Return true if the item with the same name is found
+        }
+        current = current->next;
+    }
+    return 0; // Return false if no item with the same name is found
+}
+
+void initList(List *list) {
+    list->head = NULL;
+    list->tail = NULL;
+//    list->lastNumber = 0;
+}
+
 void insert(List *list) {
-    Node *newNode = (Node*) malloc(sizeof(Node));
+	Node *newNode = (Node*) malloc(sizeof(Node));
     if (newNode == NULL) {
         printf("Memory allocation failed.\n");
         return;
     }
     
-    FILE *file = fopen("jualan.txt", "a");
+	int lastNumber = 0; 
+    // Membaca nomor catatan terakhir dari file jika tersedia
+    FILE *file = fopen("jualan.txt", "r");
+    if (file != NULL) {
+        char line[100];
+        while (fgets(line, sizeof(line), file) != NULL) {
+            sscanf(line, "%d", &lastNumber);
+        }
+        fclose(file);
+        lastNumber++; 
+    } 
+    
+    file = fopen("jualan.txt", "a");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         free(newNode);
         return;
     }
     
+    newNode->number = lastNumber;
+    
     printf("Masukkan nama barang: \n");
     // Membersihkan buffer stdin
     while (getchar() != '\n');
     fgets(newNode->info, sizeof(newNode->info), stdin);
     strtok(newNode->info, "\n"); // Menghapus karakter newline jika ada
+    
+    // Cek apakah nama barang sudah ada dalam list
+    if (isDuplicateItem(list, newNode->info)) {
+        printf("Barang dengan nama yang sama sudah ada dalam list. Barang tidak dapat ditambahkan.\n");
+        free(newNode);
+        fclose(file);
+        return;
+    }
     
     printf("Masukkan dekripsi barang: \n");
     fgets(newNode->detail, sizeof(newNode->detail), stdin);
@@ -43,6 +93,8 @@ void insert(List *list) {
     // Membersihkan buffer stdin setelah membaca integer
     while (getchar() != '\n');
     
+//    newNode->number = ++list->lastNumber; // Assign a unique sequential number to the new node
+    
     newNode->next = NULL; // Set the next pointer to NULL
     
     if (list->head == NULL) {
@@ -53,7 +105,7 @@ void insert(List *list) {
         list->tail = newNode;
     }
     
-    if (fprintf(file, "%s|%s|%.2f|%d\n", newNode->info, newNode->detail, newNode->price, newNode->available) < 0) {
+    if (fprintf(file, "%d|%s|%s|%.2f|%d\n", newNode->number, newNode->info, newNode->detail, newNode->price, newNode->available) < 0) {
         printf("Gagal menulis ke file.\n");
     }
 
@@ -76,13 +128,26 @@ void clearList(List *list) {
 
 
 void addStock(List *list) {
-    char name[100];
-    printf("Masukkan nama barang: ");
-    while (getchar() != '\n'); // Clear input buffer
-    fgets(name, sizeof(name), stdin);
-    strtok(name, "\n"); // Remove newline character if present
+//    char name[100];
+//    printf("Masukkan nama barang: ");
+//    while (getchar() != '\n'); // Clear input buffer
+//    fgets(name, sizeof(name), stdin);
+//    strtok(name, "\n"); // Remove newline character if present
 
-    Node *found = search(list, name);
+	int number;
+	printf("Masukkan no barang: ");
+	scanf("%d", &number);
+
+    Node *found = search(list, number);
+//    Node *found = NULL;
+    Node *current = list->head;
+    while (current != NULL) {
+        if (current->number == number) {
+            found = current;
+            break;
+        }
+        current = current->next;
+    }
     if (found == NULL) {
         printf("Barang tidak ditemukan.\n");
         return;
@@ -112,11 +177,11 @@ void addStock(List *list) {
     char line[200];
     while (fgets(line, sizeof(line), file) != NULL) {
         Node temp;
-        sscanf(line, "%[^|]|%[^|]|%f|%d", temp.info, temp.detail, &temp.price, &temp.available);
-        if (strcmp(temp.info, name) == 0) {
-            fprintf(tempFile, "%s|%s|%.2f|%d\n", found->info, found->detail, found->price, found->available);
+        sscanf(line, "%d|%[^|]|%[^|]|%f|%d", &temp.number, temp.info, temp.detail, &temp.price, &temp.available);
+        if (temp.number == number) {
+            fprintf(tempFile, "%d|%s|%s|%.2f|%d\n", found->number, found->info, found->detail, found->price, found->available);
         } else {
-            fprintf(tempFile, "%s|%s|%.2f|%d\n", temp.info, temp.detail, temp.price, temp.available);
+            fprintf(tempFile, "%d|%s|%s|%.2f|%d\n", temp.number, temp.info, temp.detail, temp.price, temp.available);
         }
     }
 
@@ -130,15 +195,18 @@ void addStock(List *list) {
 
 
 void deleteItem(List *list) {
-	char name[100];
-    printf("Masukkan nama barang yang ingin dihapus: ");
-    while (getchar() != '\n'); // Clear input buffer
-    fgets(name, sizeof(name), stdin);
-    strtok(name, "\n");
+//	char name[100];
+//    printf("Masukkan nama barang yang ingin dihapus: ");
+//    while (getchar() != '\n'); // Clear input buffer
+//    fgets(name, sizeof(name), stdin);
+//    strtok(name, "\n");
+    int number;
+    printf("Masukkan no barang yang ingin dihapus: ");
+    scanf("%d", &number);
     
     Node *current = list->head;
     Node *previous = NULL;
-    while (current != NULL && strcmp(current->info, name) != 0) {
+    while (current != NULL && current->number != number) {
         previous = current;
         current = current->next;
     }
@@ -155,6 +223,14 @@ void deleteItem(List *list) {
         list->tail = previous;
     }
     free(current);
+    
+    // Memperbaharui no dari barang
+    current = list->head;
+    int newNumber = 1; // newNumber dimulai dari 1
+    while (current != NULL) {
+        current->number = newNumber++;
+        current = current->next;
+    }
 
     // Rewrite the file without the deleted item
     FILE *file = fopen("jualan.txt", "w");
@@ -164,7 +240,7 @@ void deleteItem(List *list) {
     }
     current = list->head;
     while (current != NULL) {
-        fprintf(file, "%s|%s|%.2f|%d\n", current->info, current->detail, current->price, current->available);
+        fprintf(file, "%d|%s|%s|%.2f|%d\n", current->number, current->info, current->detail, current->price, current->available);
         current = current->next;
     }
     fclose(file);
@@ -172,3 +248,53 @@ void deleteItem(List *list) {
     printf("Barang berhasil dihapus.\n");
 }
 
+void writefile(List *list) {
+    FILE *file = fopen("jualan.txt", "w");
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+        return;
+    }
+
+    Node *current = list->head;
+    while (current != NULL) {
+        fprintf(file, "%d|%s|%s|%.2f|%d\n", current->number, current->info, current->detail, current->price, current->available);
+        current = current->next;
+    }
+
+    fclose(file);
+}
+
+void readfile(List *list) {
+    FILE *file = fopen("jualan.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+        return;
+    }
+
+    char line[200];
+    while (fgets(line, sizeof(line), file) != NULL) {
+        Node *newNode = (Node*)malloc(sizeof(Node));
+        if (newNode == NULL) {
+            printf("Memory allocation failed.\n");
+            fclose(file);
+            return;
+        }
+
+        sscanf(line, "%d|%[^|]|%[^|]|%f|%d", &newNode->number, newNode->info, newNode->detail, &newNode->price, &newNode->available);
+        newNode->next = NULL;
+
+        if (list->head == NULL) {
+            list->head = newNode;
+            list->tail = newNode;
+        } else {
+            list->tail->next = newNode;
+            list->tail = newNode;
+        }
+        // Update the lastNumber to the highest number found in the file
+//        if (newNode->number > list->lastNumber) {
+//            list->lastNumber = newNode->number;
+//        }
+    }
+
+    fclose(file);
+}

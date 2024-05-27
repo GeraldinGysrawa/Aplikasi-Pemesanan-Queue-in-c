@@ -7,5 +7,8 @@
 void disList(List *list);
 void history(Queue *q);
 void clearHistory();
+void dekripsiceasar(char *kalimat, int key);
+void enkripsiceasar(char *kalimat, int key);
+
 
 #endif

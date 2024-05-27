@@ -27,8 +27,6 @@ bool isAlphaNumeric(char *password);
 void Register(int index, bool isAdmin);
 bool Login(bool isAdmin);
 bool LoginAdmin();
-void userMenu();
-void adminMenu();
 
 #endif // REGISTER_H
 

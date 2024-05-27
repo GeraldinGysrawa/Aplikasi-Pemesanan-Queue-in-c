@@ -10,22 +10,32 @@ void userMenu() {
     int choice;
     bool isAdmin = false;
     int index = 0;
-
-    while (1) {
+    
+    do {
         system("cls");
-        printf("User Menu:\n");
-        printf("1. Register\n");
-        printf("2. Login\n");
-        printf("3. Back to Main Menu\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
+        int i = 15;
+        gotoxy(i,5);  printf(" *######*   #######  *#####*      *##*      ##       *#####*       *#####+   ########   *######*    *#####*     #######    \n");
+		gotoxy(i,6);  printf(" ##         ##       ##    ##    *#   #*    ##       ##    #*      ##    ##     ##     *#      #*   ##    ##     ##        \n");
+		gotoxy(i,7);  printf(" ##         ##       ##    ##   *#     #*   ##       ##     #*     ##           ##    *#        #*  ##    ##     ##		\n");
+		gotoxy(i,8);  printf(" **####*    *####    *#####*   *# ===== #*  ##       ##      #*     *#### *     ##   *#          #*  *#####*     *####     \n");
+		gotoxy(i,9);  printf(" ##     ##  ##       ##  ##    ##       ##  ##       ##     *#           ##     ##    *#        #*   ##  ##      ##        \n");
+		gotoxy(i,10); printf(" ##     ##  ##       ##   ##   ##       ##  ##       ##    *#      ##    ##     ##     *#      #*    ##   ##     ##        \n");
+		gotoxy(i,11); printf(" *#####*    #######  ##    ##  ##       ##  #######  *####*#       +#####*      ##      *#####*      ##    ##    #######   \n");
+		gotoxy(i+10, 14); printf("|=================================================================================================|\n");
+	    gotoxy(i+10, 15); printf("												     												 \n");
+	    gotoxy(i+10, 16); printf("|                      [1]REGISTER          [2]LOGIN         [3]EXIT                              |\n");
+	    gotoxy(i+10, 17); printf("  																								 \n");
+	    gotoxy(i+10, 18); printf("|=================================================================================================|\n\n");
+	    gotoxy(i+50, 19); printf("Masukkan pilihan Anda:         ");
+	    scanf("%d", &choice);
+        fflush(stdin);
 
         switch (choice) {
             case 1:
                 Register(index, isAdmin);
                 break;
             case 2:
-                if (Login(isAdmin)) {
+            	if (Login(isAdmin)) {
                     printf("User Login Successful\n");
                     user();
                 } else {
@@ -35,13 +45,15 @@ void userMenu() {
                 getchar(); // To pause the screen
                 break;
             case 3:
-                return;
+                return 0;
             default:
-                printf("Invalid choice\n");
-                getchar(); // To pause the screen
-                getchar(); // To pause the screen
+	            puts("\nINVALID !! PLEASE INSERT THE RIGHT CHOOSE\n");
+				system("pause");
+				system("cls");
+				break;
         }
-    }
+    }while (choice != 2);
+
 }
 
 
@@ -59,18 +71,25 @@ int user() {
 
     int choice;
     do {
-        printf("\n=== MENU ===\n");
-        printf("1. Tampilkan Barang yang Dijual\n");
-        printf("2. Beli Barang\n");
-        printf("3. Keluar\n");
-        printf("Pilih: ");
-        scanf("%d", &choice);
-
+    	int i = 43;
+    	system("cls");
+	    gotoxy(i + 50, 1); printf("=================================\n");
+	    gotoxy(i+ 50, 2); printf("|           M E N U             |\n");
+	    gotoxy(i+ 50, 3); printf("=================================\n");
+	    gotoxy(i+ 50, 4); printf("|1. Tampilkan Barang yang Dijual|\n");
+	    gotoxy(i+ 50, 5);printf("|2. Beli Barang                  |\n");
+	    gotoxy(i+ 50, 6);printf("|3. Keluar                       |\n");
+	    gotoxy(i+ 50, 7);printf("=================================\n");
+	    gotoxy(i+ 50, 8);printf("Pilih:         \n");
+	    gotoxy(i+ 57, 8);scanf("%d", &choice);
+	    
         switch (choice) {
             case 1:
+//            	system("cls");
                 disList(&barangList);
                 break;
             case 2:
+//            	system("cls");
             	disList(&barangList);
                 belibarang(&pembeliQueue, &barangList);
                 break;
